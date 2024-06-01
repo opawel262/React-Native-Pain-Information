@@ -10,24 +10,20 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Welcome"
-          screenOptions={{
-            headerTransparent: true,
-            headerTitle: "",
-            headerBackTitleVisible: false,
-            headerTintColor: "#000",
-          }}
-        >
-          <Stack.Screen name="Welcome" component={IntroScreen} />
-          <Stack.Screen name="Enter Code" component={EnterCode} />
-          <Stack.Screen name="Form" component={FormScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Welcome"
+        screenOptions={{
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackTitleVisible: false,
+          headerTintColor: "#000",
+        }}
+      >
+        <Stack.Screen name="Welcome" component={IntroScreen} />
+        <Stack.Screen name="Enter Code" component={EnterCode} />
+        <Stack.Screen name="Form" component={FormScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({});

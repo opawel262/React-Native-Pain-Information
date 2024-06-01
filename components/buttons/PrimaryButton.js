@@ -9,7 +9,7 @@ function PrimaryButton({ title, onPress }) {
         onPress={onPress}
         style={({ pressed }) => [styles.button, pressed && styles.pressed]}
       >
-        <LinearGradient colors={["#2eb1df", "#104877"]} style={styles.gradient}>
+        <LinearGradient colors={["#41C9E2", "#227DDA"]} style={styles.gradient}>
           <View>
             <Text style={styles.buttonText}>{title}</Text>
           </View>
@@ -21,10 +21,10 @@ function PrimaryButton({ title, onPress }) {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    marginVertical: 5,
+    marginVertical: 8,
     alignItems: "center",
     justifyContent: "center",
-    width: "80%",
+    width: "90%",
     height: 55,
     borderRadius: 15,
     overflow: "hidden",
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.7,
     shadowRadius: 3,
-    elevation: 1,
+    elevation: 6,
   },
   button: {
     width: "100%",
