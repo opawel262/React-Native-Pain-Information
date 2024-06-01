@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Image,
   View,
@@ -10,9 +10,48 @@ import {
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import Arrow from "../components/Arrow";
 import { LinearGradient } from "expo-linear-gradient";
-import PointSelector from "../components/PointSelector";
+import PointSelectorArea from "../components/PointSelectorArea";
 
-function FormScreen() {
+function FormScreen({ navigation }) {
+  const [formPage, setFormPage] = useState(1);
+  const [humanImage, setHumanImage] = useState("front");
+  listHumanImages = ["front", "leftSide", "back", "rightSide"];
+  currentImageIndex = listHumanImages.indexOf(humanImage);
+  const [point, setPoint] = useState({ x: -500, y: -500 });
+  const HumanInformation = {
+    bodyPainLocationX: point.x,
+    bodyPainLocationY: point.y,
+    bodySide: humanImage,
+    note: "",
+    typeOfPain: "",
+    intesityOfPain: 0,
+  };
+  const HumanAdditionalInformation = {
+    code: "",
+    heightCm: 0,
+    weightKg: 0,
+    age: 0,
+    pastIlnesses: "",
+    medications: "",
+  };
+  function handleRightArrowPress() {
+    if (currentImageIndex === listHumanImages.length - 1) {
+      setHumanImage(listHumanImages[0]);
+    } else {
+      setHumanImage(listHumanImages[currentImageIndex + 1]);
+    }
+    setPoint({ x: -500, y: -500 });
+  }
+
+  function handleLeftArrowPress() {
+    if (currentImageIndex === 0) {
+      setHumanImage(listHumanImages[listHumanImages.length - 1]);
+    } else {
+      setHumanImage(listHumanImages[currentImageIndex - 1]);
+    }
+    setPoint({ x: -500, y: -500 });
+  }
+
   return (
     <LinearGradient colors={["#b1e2f3", "#ffff"]} style={styles.rootScreen}>
       <ImageBackground
@@ -21,33 +60,41 @@ function FormScreen() {
         style={styles.rootScreen}
         imageStyle={{ opacity: 0.2 }}
       >
-        <View style={styles.rootScreen}>
-          <View style={styles.upperContainer}>
-            <Text
-              style={{
-                fontSize: 27,
-                color: "#173966",
-                fontWeight: "bold",
-                fontFamily: "sans-serif-medium",
-                textAlign: "center",
-              }}
-            >
-              Mark the area where you feel pain
-            </Text>
+        {formPage === 1 && (
+          <View style={styles.rootScreen}>
+            <View style={styles.upperContainer}>
+              <Text
+                style={{
+                  fontSize: 27,
+                  color: "#173966",
+                  fontWeight: "bold",
+                  fontFamily: "sans-serif-medium",
+                  textAlign: "center",
+                }}
+              >
+                Mark the area where you feel pain
+              </Text>
+            </View>
+            <View style={styles.middleContainer}>
+              <Pressable onPress={handleLeftArrowPress} style={styles.arrow}>
+                <Arrow rotation="180deg" />
+              </Pressable>
+              <PointSelectorArea
+                humanImage={humanImage}
+                setPoint={setPoint}
+                point={point}
+              />
+              <Pressable onPress={handleRightArrowPress} style={styles.arrow}>
+                <Arrow />
+              </Pressable>
+            </View>
+            <View style={styles.lowerContainer}>
+              <PrimaryButton title="Submit" onPress={() => {}} />
+            </View>
           </View>
-          <View style={styles.middleContainer}>
-            <Pressable onPress={() => {}} style={styles.arrow}>
-              <Arrow rotation="180deg" />
-            </Pressable>
-            <PointSelector />
-            <Pressable onPress={() => {}} style={styles.arrow}>
-              <Arrow />
-            </Pressable>
-          </View>
-          <View style={styles.lowerContainer}>
-            <PrimaryButton title="Submit" onPress={() => {}} />
-          </View>
-        </View>
+        )}
+        {formPage === 2 && <View style={styles.rootScreen}></View>}
+        {formPage === 3 && <View style={styles.rootScreen}></View>}
       </ImageBackground>
     </LinearGradient>
   );
@@ -66,11 +113,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   upperContainer: {
-    marginTop: 70,
+    marginTop: 60,
     flex: 2,
   },
   middleContainer: {
-    flex: 13,
+    flex: 9,
     flexDirection: "row",
     width: "100%",
     justifyContent: "space-around",
