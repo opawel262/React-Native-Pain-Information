@@ -7,18 +7,22 @@ import {
   Image,
 } from "react-native";
 
-function PointSelectorArea({ humanImage, setPoint, point }) {
+function PointSelectorArea({ humanImage, setPoint, point, freeze = false }) {
   const handlePress = (event) => {
     const { locationX, locationY } = event.nativeEvent;
     const newPoint = {
       x: parseFloat(locationX.toFixed(2)),
       y: parseFloat(locationY.toFixed(2)),
     };
+
     setPoint(newPoint);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={handlePress} style={styles.container}>
+    <TouchableWithoutFeedback
+      onPress={freeze ? null : handlePress}
+      style={styles.container}
+    >
       <View style={styles.container}>
         {point && (
           <View

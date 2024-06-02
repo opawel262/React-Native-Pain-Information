@@ -12,31 +12,32 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import PrimaryButton from "../components/buttons/PrimaryButton";
-import { getPainInfo } from "../utils/http";
+import { getPainInfo, getAdditionalPainInfo } from "../utils/http";
 
-function EnterCode({ code, navigation }) {
+function EnterCode({ navigation }) {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [code, setCode] = React.useState("");
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const requestData = {
-        ...HumanAdditionalInformation,
-      };
-      console.log(requestData);
-
       const response = await getPainInfo(code);
       setIsLoading(false);
-      ("ReturnCodeScreen");
-      HumanAdditionalInformation = {
+      const HumanInformation = {
         ...response,
       };
-      setCode(HumanAdditionalInformation.code);
-      console.log(HumanAdditionalInformation);
+      if (HumanInformation.has_additional_info === true) {
+        const response = await getAdditionalPainInfo(code);
+        HumanInformation.additionalInfo = {
+          ...response,
+        };
+      }
+
+      navigation.navigate("View Pain Info", { HumanInformation });
     } catch (error) {
       setIsLoading(false);
 
       console.error(error); // Log the error to the console
       Alert.alert("Error", "Failed to create additional pain info");
-      setFormPage("InfoScreen");
     }
   };
 
@@ -52,7 +53,12 @@ function EnterCode({ code, navigation }) {
           <Image source={require("../assets/logo.png")} style={styles.logo} />
           <View style={styles.container}>
             <Text style={styles.text}>Enter code to view pain information</Text>
-            <TextInput style={styles.input} selectTextOnFocus={true} />
+            <TextInput
+              style={styles.input}
+              selectTextOnFocus={true}
+              value={code}
+              onChangeText={setCode}
+            />
             <PrimaryButton title="Enter" onPress={handleSubmit} />
           </View>
         </View>

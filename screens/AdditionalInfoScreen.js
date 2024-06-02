@@ -77,12 +77,12 @@ function AdditionalInfoScreen({
           </Text>
           <View style={styles.formContainer}>
             <FloatingLabelInput
-              label="Enter your height..."
+              label="Enter your height (cm)..."
               value={heightCm}
               onChangeText={setHeightCm}
             />
             <FloatingLabelInput
-              label="Enter your weight..."
+              label="Enter your weight (kg)..."
               value={weightKg}
               onChangeText={setWeightKg}
             />

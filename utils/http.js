@@ -20,6 +20,7 @@ export async function createAdditionalPainInfo(data) {
       BACKEND_URL + "/api/additional-info/create",
       data
     );
+    console.log("Response: " + response.data);
     return response.data;
   } catch (error) {
     console.error("Error while creating additional pain info:", error);
@@ -29,8 +30,10 @@ export async function createAdditionalPainInfo(data) {
 export async function getPainInfo(code) {
   try {
     const response = await axios.get(
-      BACKEND_URL + "/api/pain-information/" + code
+      BACKEND_URL + "/api/pain-information/retrieve/" + code
     );
+    console.log("Response add: " + response.data);
+
     return response.data;
   } catch (error) {
     console.error("Error while getting pain info:", error);
@@ -40,7 +43,7 @@ export async function getPainInfo(code) {
 export async function getAdditionalPainInfo(code) {
   try {
     const response = await axios.get(
-      BACKEND_URL + "/api/additional-info/" + code
+      BACKEND_URL + "/api/additional-info/retrieve/" + code
     );
     return response.data;
   } catch (error) {
