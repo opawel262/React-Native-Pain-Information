@@ -13,7 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import { Picker } from "@react-native-picker/picker";
 
-function EnterInfoScreen({ route, navigation }) {
+function EnterInfoScreen({ setFormPage }) {
   const [intensityOfPain, setIntensityOfPain] = useState("");
   const [typeOfPain, setTypeOfPain] = useState("");
   const [note, setNote] = useState("");
@@ -26,13 +26,15 @@ function EnterInfoScreen({ route, navigation }) {
       [
         {
           text: "No",
-          onPress: () => console.log("Submission cancelled"),
+          onPress: () => {
+            setFormPage("ReturnCodeScreen");
+          },
           style: "cancel",
         },
         {
           text: "Yes",
           onPress: () => {
-            // Handle the form submission logic here
+            setFormPage("AdditionalInfoScreen");
           },
         },
       ],
@@ -50,6 +52,18 @@ function EnterInfoScreen({ route, navigation }) {
       >
         <View style={styles.rootScreen}>
           <Image source={require("../assets/logo.png")} style={styles.logo} />
+          <Text
+            style={{
+              fontSize: 27,
+              color: "#173966",
+              fontWeight: "bold",
+              fontFamily: "sans-serif-medium",
+              textAlign: "center",
+              paddingBottom: 10,
+            }}
+          >
+            Enter information{" "}
+          </Text>
           <View style={styles.formContainer}>
             <View style={styles.pickerContainer}>
               {intensityOfPain !== "" ? (

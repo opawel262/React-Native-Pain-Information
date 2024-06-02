@@ -30,9 +30,14 @@ function ReturnCodeScreen() {
         <View style={styles.rootScreen}>
           <Image source={require("../assets/logo.png")} style={styles.logo} />
           <View style={styles.container}>
-            <Text style={styles.text}>Enter code to view pain information</Text>
-            <TextInput style={styles.input} selectTextOnFocus={true} />
-            <PrimaryButton title="Enter" onPress={copyToClipboard} />
+            <Text style={styles.text}>Generated code</Text>
+            <TextInput
+              style={styles.input}
+              value="123456"
+              editable={false}
+              selectTextOnFocus={true}
+            />
+            <PrimaryButton title="Copy" onPress={copyToClipboard} />
           </View>
         </View>
       </ImageBackground>
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
     margin: 6,
     width: "90%",
     textAlign: "center",
-    borderRadius: 15,
+    borderRadius: 40,
     backgroundColor: "#fff",
     color: "black",
     fontSize: 30,

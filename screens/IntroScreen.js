@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   upperContainer: {
+    marginTop: 20,
     flex: 6,
     justifyContent: "flex-start",
     alignItems: "center",
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    marginBottom: 120,
+    marginBottom: 80,
   },
   logo: {
     width: 320,

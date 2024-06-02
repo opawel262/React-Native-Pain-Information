@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import PainScreen from "./PainScreen";
 import InfoScreen from "./InfoScreen";
+import ReturnCodeScreen from "./ReturnCodeScreen";
+import AdditionalInfoScreen from "./AdditionalInfoScreen";
+
 const FormStack = createNativeStackNavigator();
 
 function FormScreen({ navigation }) {
@@ -9,6 +12,9 @@ function FormScreen({ navigation }) {
   const [point, setPoint] = useState({ x: -500, y: -500 });
 
   const [formPage, setFormPage] = useState("PainScreen");
+  if (formPage === "Back") {
+    navigation.navigate("Welcome");
+  }
   console.log(formPage);
   const HumanInformation = {
     bodyPainLocationX: point.x,
@@ -43,12 +49,21 @@ function FormScreen({ navigation }) {
         <InfoScreen
           HumanInformation={HumanInformation}
           HumanAdditionalInformation={HumanAdditionalInformation}
+          setFormPage={setFormPage}
         />
       )}
       {formPage === "AdditionalInfoScreen" && (
         <AdditionalInfoScreen
           HumanInformation={HumanInformation}
           HumanAdditionalInformation={HumanAdditionalInformation}
+          setFormPage={setFormPage}
+        />
+      )}
+      {formPage === "ReturnCodeScreen" && (
+        <ReturnCodeScreen
+          HumanInformation={HumanInformation}
+          HumanAdditionalInformation={HumanAdditionalInformation}
+          setFormPage={setFormPage}
         />
       )}
     </>
