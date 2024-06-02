@@ -12,11 +12,32 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import PrimaryButton from "../components/buttons/PrimaryButton";
+import { getPainInfo } from "../utils/http";
 
-function ReturnCodeScreen() {
-  const copyToClipboard = () => {
-    Clipboard.setString("123456");
-    Alert.alert("Text copied to clipboard!");
+function EnterCode({ code, navigation }) {
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const requestData = {
+        ...HumanAdditionalInformation,
+      };
+      console.log(requestData);
+
+      const response = await getPainInfo(code);
+      setIsLoading(false);
+      ("ReturnCodeScreen");
+      HumanAdditionalInformation = {
+        ...response,
+      };
+      setCode(HumanAdditionalInformation.code);
+      console.log(HumanAdditionalInformation);
+    } catch (error) {
+      setIsLoading(false);
+
+      console.error(error); // Log the error to the console
+      Alert.alert("Error", "Failed to create additional pain info");
+      setFormPage("InfoScreen");
+    }
   };
 
   return (
@@ -32,7 +53,7 @@ function ReturnCodeScreen() {
           <View style={styles.container}>
             <Text style={styles.text}>Enter code to view pain information</Text>
             <TextInput style={styles.input} selectTextOnFocus={true} />
-            <PrimaryButton title="Enter" onPress={copyToClipboard} />
+            <PrimaryButton title="Enter" onPress={handleSubmit} />
           </View>
         </View>
       </ImageBackground>
@@ -90,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReturnCodeScreen;
+export default EnterCode;

@@ -10,35 +10,48 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import FloatingLabelInput from "../components/inputs/FloatingLabelInput";
+import { createAdditionalPainInfo } from "../utils/http";
 
-function AdditionalInfoScreen({ route, navigation }) {
-  const [height, setHeight] = useState("");
-  const [weight, setWeight] = useState("");
-  const [age, setAge] = useState("");
-  const [pastIllness, setPastIllness] = useState("");
-  const [currentMedications, setCurrentMedications] = useState("");
-  const [note, setNote] = useState("");
+function AdditionalInfoScreen({
+  heightCm,
+  setHeightCm,
+  weightKg,
+  setWeightKg,
+  age,
+  setAge,
+  pastIlnesses,
+  setPastIlnesses,
+  medications,
+  setMedications,
+  setFormPage,
+  HumanAdditionalInformation,
+  setCode,
+}) {
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = () => {
-    // Handle form submission logic here
-    Alert.alert(
-      "Additional Information",
-      "Do you want to add more information?",
-      [
-        {
-          text: "No",
-          onPress: () => console.log("Submission cancelled"),
-          style: "cancel",
-        },
-        {
-          text: "Yes",
-          onPress: () => {
-            // Handle the form submission logic here
-          },
-        },
-      ],
-      { cancelable: false }
-    );
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const requestData = {
+        ...HumanAdditionalInformation,
+      };
+      console.log(requestData);
+
+      const response = await createAdditionalPainInfo(requestData);
+      setIsLoading(false);
+      setFormPage("ReturnCodeScreen");
+      HumanAdditionalInformation = {
+        ...response,
+      };
+      setCode(HumanAdditionalInformation.code);
+      console.log(HumanAdditionalInformation);
+    } catch (error) {
+      setIsLoading(false);
+
+      console.error(error); // Log the error to the console
+      Alert.alert("Error", "Failed to create additional pain info");
+      setFormPage("InfoScreen");
+    }
   };
 
   return (
@@ -65,13 +78,13 @@ function AdditionalInfoScreen({ route, navigation }) {
           <View style={styles.formContainer}>
             <FloatingLabelInput
               label="Enter your height..."
-              value={height}
-              onChangeText={setHeight}
+              value={heightCm}
+              onChangeText={setHeightCm}
             />
             <FloatingLabelInput
               label="Enter your weight..."
-              value={weight}
-              onChangeText={setWeight}
+              value={weightKg}
+              onChangeText={setWeightKg}
             />
             <FloatingLabelInput
               label="Enter your age..."
@@ -80,13 +93,13 @@ function AdditionalInfoScreen({ route, navigation }) {
             />
             <FloatingLabelInput
               label="Enter your past illnesses..."
-              value={pastIllness}
-              onChangeText={setPastIllness}
+              value={pastIlnesses}
+              onChangeText={setPastIlnesses}
             />
             <FloatingLabelInput
               label="Enter your current medications..."
-              value={currentMedications}
-              onChangeText={setCurrentMedications}
+              value={medications}
+              onChangeText={setMedications}
             />
 
             <PrimaryButton title="Submit" onPress={handleSubmit} />

@@ -10,7 +10,10 @@ import {
 function PointSelectorArea({ humanImage, setPoint, point }) {
   const handlePress = (event) => {
     const { locationX, locationY } = event.nativeEvent;
-    const newPoint = { x: locationX, y: locationY };
+    const newPoint = {
+      x: parseFloat(locationX.toFixed(2)),
+      y: parseFloat(locationY.toFixed(2)),
+    };
     setPoint(newPoint);
   };
 

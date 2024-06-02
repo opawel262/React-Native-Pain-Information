@@ -6,14 +6,13 @@ import {
   StyleSheet,
   Image,
   TextInput,
-  TouchableOpacity,
   Clipboard,
   Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 
-function ReturnCodeScreen() {
+function ReturnCodeScreen({ code }) {
   const copyToClipboard = () => {
     Clipboard.setString("123456");
     Alert.alert("Text copied to clipboard!");
@@ -33,7 +32,7 @@ function ReturnCodeScreen() {
             <Text style={styles.text}>Generated code</Text>
             <TextInput
               style={styles.input}
-              value="123456"
+              value={code}
               editable={false}
               selectTextOnFocus={true}
             />

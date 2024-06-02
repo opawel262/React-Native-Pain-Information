@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,17 +8,26 @@ import {
   TextInput,
   Alert,
 } from "react-native";
-
+import { createPainInfo } from "../utils/http";
 import { LinearGradient } from "expo-linear-gradient";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import { Picker } from "@react-native-picker/picker";
+import LoadingOverlay from "../components/LoadingOverlay";
 
-function EnterInfoScreen({ setFormPage }) {
-  const [intensityOfPain, setIntensityOfPain] = useState("");
-  const [typeOfPain, setTypeOfPain] = useState("");
-  const [note, setNote] = useState("");
+function InfoScreen({
+  setFormPage,
+  intensityOfPain,
+  setIntensityOfPain,
+  typeOfPain,
+  setTypeOfPain,
+  note,
+  setNote,
+  HumanInformation,
+  setCode,
+}) {
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Handle form submission logic here
     Alert.alert(
       "Additional Information",
@@ -26,15 +35,53 @@ function EnterInfoScreen({ setFormPage }) {
       [
         {
           text: "No",
-          onPress: () => {
-            setFormPage("ReturnCodeScreen");
+          onPress: async () => {
+            setIsLoading(true);
+            try {
+              const requestData = {
+                ...HumanInformation,
+              };
+              console.log(requestData);
+
+              const response = await createPainInfo(requestData);
+              setIsLoading(false);
+              setFormPage("ReturnCodeScreen");
+              HumanInformation = {
+                ...response,
+              };
+              setCode(HumanInformation.code);
+              console.log(HumanInformation);
+            } catch (error) {
+              setIsLoading(false);
+              Alert.alert("Error", "Failed to create pain info");
+              setFormPage("PainScreen");
+            }
           },
           style: "cancel",
         },
         {
           text: "Yes",
-          onPress: () => {
-            setFormPage("AdditionalInfoScreen");
+          onPress: async () => {
+            setIsLoading(true);
+            try {
+              const requestData = {
+                ...HumanInformation,
+              };
+              console.log(requestData);
+
+              const response = await createPainInfo(requestData);
+              setIsLoading(false);
+              setFormPage("AdditionalInfoScreen");
+              HumanInformation = {
+                ...response,
+              };
+              setCode(HumanInformation.code);
+              console.log(HumanInformation);
+            } catch (error) {
+              setIsLoading(false);
+              Alert.alert("Error", "Failed to create pain info");
+              setFormPage("PainScreen");
+            }
           },
         },
       ],
@@ -50,76 +97,80 @@ function EnterInfoScreen({ setFormPage }) {
         style={styles.rootScreen}
         imageStyle={{ opacity: 0.2 }}
       >
-        <View style={styles.rootScreen}>
-          <Image source={require("../assets/logo.png")} style={styles.logo} />
-          <Text
-            style={{
-              fontSize: 27,
-              color: "#173966",
-              fontWeight: "bold",
-              fontFamily: "sans-serif-medium",
-              textAlign: "center",
-              paddingBottom: 10,
-            }}
-          >
-            Enter information{" "}
-          </Text>
-          <View style={styles.formContainer}>
-            <View style={styles.pickerContainer}>
-              {intensityOfPain !== "" ? (
-                <Text style={styles.pickerPlaceholder}>
-                  Intensity of Pain (1-10)
-                </Text>
-              ) : null}
-              <Picker
-                selectedValue={intensityOfPain}
-                onValueChange={(itemValue, itemIndex) =>
-                  setIntensityOfPain(itemValue)
-                }
-                style={[styles.picker, intensityOfPain && styles.pickerValue]}
-              >
-                <Picker.Item label="Intensity of Pain (1-10)" value="" />
-                <Picker.Item label="1" value="1" />
-                <Picker.Item label="2" value="2" />
-                <Picker.Item label="3" value="3" />
-                <Picker.Item label="4" value="4" />
-                <Picker.Item label="5" value="5" />
-                <Picker.Item label="6" value="6" />
-                <Picker.Item label="7" value="7" />
-                <Picker.Item label="8" value="8" />
-                <Picker.Item label="9" value="9" />
-                <Picker.Item label="10" value="10" />
-              </Picker>
+        {isLoading ? (
+          <LoadingOverlay />
+        ) : (
+          <View style={styles.rootScreen}>
+            <Image source={require("../assets/logo.png")} style={styles.logo} />
+            <Text
+              style={{
+                fontSize: 27,
+                color: "#173966",
+                fontWeight: "bold",
+                fontFamily: "sans-serif-medium",
+                textAlign: "center",
+                paddingBottom: 10,
+              }}
+            >
+              Enter information{" "}
+            </Text>
+            <View style={styles.formContainer}>
+              <View style={styles.pickerContainer}>
+                {intensityOfPain !== "" ? (
+                  <Text style={styles.pickerPlaceholder}>
+                    Intensity of Pain (1-10)
+                  </Text>
+                ) : null}
+                <Picker
+                  selectedValue={intensityOfPain}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setIntensityOfPain(itemValue)
+                  }
+                  style={[styles.picker, intensityOfPain && styles.pickerValue]}
+                >
+                  <Picker.Item label="Intensity of Pain (1-10)" value="" />
+                  <Picker.Item label="1" value="1" />
+                  <Picker.Item label="2" value="2" />
+                  <Picker.Item label="3" value="3" />
+                  <Picker.Item label="4" value="4" />
+                  <Picker.Item label="5" value="5" />
+                  <Picker.Item label="6" value="6" />
+                  <Picker.Item label="7" value="7" />
+                  <Picker.Item label="8" value="8" />
+                  <Picker.Item label="9" value="9" />
+                  <Picker.Item label="10" value="10" />
+                </Picker>
+              </View>
+              <View style={styles.pickerContainer}>
+                {typeOfPain !== "" ? (
+                  <Text style={styles.pickerPlaceholder}>Type of Pain</Text>
+                ) : null}
+                <Picker
+                  selectedValue={typeOfPain}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setTypeOfPain(itemValue)
+                  }
+                  style={[styles.picker, typeOfPain && styles.pickerValue]}
+                >
+                  <Picker.Item label="Type of Pain" value="" />
+                  <Picker.Item label="Pulsating" value="pulsating" />
+                  <Picker.Item label="Sharp" value="sharp" />
+                  <Picker.Item label="Dull" value="dull" />
+                  <Picker.Item label="Throbbing" value="throbbing" />
+                  {/* Add more options as needed */}
+                </Picker>
+              </View>
+              <TextInput
+                style={[styles.input, styles.multilineInput]}
+                placeholder="Enter your notes here..."
+                value={note}
+                onChangeText={setNote}
+                multiline={true}
+              />
+              <PrimaryButton title="Submit" onPress={handleSubmit} />
             </View>
-            <View style={styles.pickerContainer}>
-              {typeOfPain !== "" ? (
-                <Text style={styles.pickerPlaceholder}>Type of Pain</Text>
-              ) : null}
-              <Picker
-                selectedValue={typeOfPain}
-                onValueChange={(itemValue, itemIndex) =>
-                  setTypeOfPain(itemValue)
-                }
-                style={[styles.picker, typeOfPain && styles.pickerValue]}
-              >
-                <Picker.Item label="Type of Pain" value="" />
-                <Picker.Item label="Pulsating" value="pulsating" />
-                <Picker.Item label="Sharp" value="sharp" />
-                <Picker.Item label="Dull" value="dull" />
-                <Picker.Item label="Throbbing" value="throbbing" />
-                {/* Add more options as needed */}
-              </Picker>
-            </View>
-            <TextInput
-              style={[styles.input, styles.multilineInput]}
-              placeholder="Enter your notes here..."
-              value={note}
-              onChangeText={setNote}
-              multiline={true}
-            />
-            <PrimaryButton title="Submit" onPress={handleSubmit} />
           </View>
-        </View>
+        )}
       </ImageBackground>
     </LinearGradient>
   );
@@ -194,4 +245,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EnterInfoScreen;
+export default InfoScreen;

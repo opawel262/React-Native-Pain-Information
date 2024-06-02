@@ -3,7 +3,7 @@ import { View, TextInput, Text, StyleSheet } from "react-native";
 
 const FloatingLabelInput = ({ label, value, onChangeText, ...props }) => {
   const [isFocused, setIsFocused] = useState(false);
-
+  console.log(value);
   return (
     <View style={styles.inputContainer}>
       <Text style={[styles.label, (isFocused || value) && styles.labelFocused]}>
