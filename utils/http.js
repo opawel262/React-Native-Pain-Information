@@ -36,7 +36,6 @@ export async function getPainInfo(code) {
 
     return response.data;
   } catch (error) {
-    console.error("Error while getting pain info:", error);
     throw error;
   }
 }
@@ -47,7 +46,6 @@ export async function getAdditionalPainInfo(code) {
     );
     return response.data;
   } catch (error) {
-    console.error("Error while getting additional pain info:", error);
     throw error;
   }
 }

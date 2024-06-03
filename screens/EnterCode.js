@@ -18,6 +18,10 @@ function EnterCode({ navigation }) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [code, setCode] = React.useState("");
   const handleSubmit = async () => {
+    if (code === "") {
+      Alert.alert("Error", "Please enter a code");
+      return;
+    }
     setIsLoading(true);
     try {
       const response = await getPainInfo(code);
@@ -37,7 +41,7 @@ function EnterCode({ navigation }) {
       setIsLoading(false);
 
       console.error(error); // Log the error to the console
-      Alert.alert("Error", "Failed to create additional pain info");
+      Alert.alert("Error", "Wrong code, please try again");
     }
   };
 
@@ -78,7 +82,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 20,
     flex: 1,
-    width: "65%",
+    width: "80%",
     alignItems: "center",
   },
   logo: {

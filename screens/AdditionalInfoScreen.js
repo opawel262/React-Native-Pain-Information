@@ -44,7 +44,6 @@ function AdditionalInfoScreen({
         ...response,
       };
       setCode(HumanAdditionalInformation.code);
-      console.log(HumanAdditionalInformation);
     } catch (error) {
       setIsLoading(false);
 

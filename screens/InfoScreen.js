@@ -29,6 +29,10 @@ function InfoScreen({
 
   const handleSubmit = async () => {
     // Handle form submission logic here
+    if (intensityOfPain === "" || typeOfPain === "") {
+      Alert.alert("Error", "Please fill two first fields");
+      return;
+    }
     Alert.alert(
       "Additional Information",
       "Do you want to add more information?",
