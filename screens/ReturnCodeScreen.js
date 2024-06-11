@@ -6,16 +6,21 @@ import {
   StyleSheet,
   Image,
   TextInput,
-  Clipboard,
   Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import PrimaryButton from "../components/buttons/PrimaryButton";
+import * as Clipboard from "expo-clipboard";
 
 function ReturnCodeScreen({ code }) {
-  const copyToClipboard = () => {
-    Clipboard.setString("123456");
-    Alert.alert("Text copied to clipboard!");
+  const copyToClipboard = async () => {
+    try {
+      await Clipboard.setStringAsync(code);
+      Alert.alert("Text copied to clipboard!");
+    } catch (error) {
+      Alert.alert("Failed to copy text to clipboard!");
+      console.error(error);
+    }
   };
 
   return (
